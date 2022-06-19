@@ -1,0 +1,14 @@
+autowire:
+  singleton:
+    github.com/ioc-golang/shopping-system/cmd/app.App:
+      param:
+       name: "shopping-system"
+  normal:
+    github.com/alibaba/ioc-golang/extension/normal/mysql.Impl:
+      dev-mysql:
+        param:
+          host: "127.0.0.1"
+          port: 3306
+          username: "root"
+          password: "root"
+          dbname: "dev"
