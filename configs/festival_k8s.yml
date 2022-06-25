@@ -1,0 +1,27 @@
+autowire:
+  normal:
+    github.com/alibaba/ioc-golang/extension/state/redis.Redis:
+      dev-redis:
+        param:
+          address: "redis-svc:6379"
+    github.com/alibaba/ioc-golang/extension/db/gorm.GORMDB:
+      dev-mysql:
+        param:
+          host: "mysql-svc"
+          port: 3306
+          username: "root"
+          password: "root"
+          dbname: "dev"
+  rpc-client:
+    github.com/ioc-golang/shopping-system/pkg/service/product/api.ServiceIOCRPCClient:
+      param:
+        address: ioc-shopping-system-product-svc:2022
+    github.com/ioc-golang/shopping-system/pkg/service/advertisement/api.ServiceIOCRPCClient:
+      param:
+        address: ioc-shopping-system-advertisement-svc:2022
+
+debug:
+  app-name: festival
+  interceptors:
+    trace:
+      collector-address: jaeger-collector-svc:14268

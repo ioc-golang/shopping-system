@@ -1,0 +1,11 @@
+debug:
+  app-name: shopping-ui
+  interceptors:
+    trace:
+      collector-address: jaeger-collector:14268
+
+autowire:
+  rpc-client:
+    github.com/ioc-golang/shopping-system/pkg/service/festival/api.ServiceIOCRPCClient:
+      param:
+        address: ioc-shopping-system-festival:2022

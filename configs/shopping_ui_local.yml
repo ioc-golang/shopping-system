@@ -1,0 +1,7 @@
+debug:
+  app-name: shopping-ui
+autowire:
+  rpc-client:
+    github.com/ioc-golang/shopping-system/pkg/service/festival/api.ServiceIOCRPCClient:
+      param:
+        address: localhost:2024

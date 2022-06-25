@@ -1,15 +1,13 @@
 package main
 
 import (
-	"context"
-	"fmt"
+	"flag"
 	"github.com/alibaba/ioc-golang"
-	conf "github.com/alibaba/ioc-golang/config"
-	"github.com/alibaba/ioc-golang/extension/normal/http_server"
-	"github.com/alibaba/ioc-golang/extension/normal/http_server/ghttp"
+	"github.com/alibaba/ioc-golang/config"
+	"github.com/gin-gonic/gin"
 	"github.com/ioc-golang/shopping-system/internal/auth"
 	"github.com/ioc-golang/shopping-system/pkg/model/vo"
-	"github.com/ioc-golang/shopping-system/pkg/service/festival/api"
+	festivalAPI "github.com/ioc-golang/shopping-system/pkg/service/festival/api"
 	"net/http"
 )
 
@@ -17,51 +15,77 @@ import (
 // +ioc:autowire:type=singleton
 
 type App struct {
-	HttpServer    http_server.ImplIOCInterface   `normal:",port=8080"`
 	Authenticator auth.AuthenticatorIOCInterface `singleton:""`
 
-	FestivalServiceClient api.ServiceIOCRPCClient `rpc-client:",address=festival-service"`
+	FestivalServiceClient festivalAPI.ServiceIOCRPCClient `rpc-client:""`
 }
 
 func (a *App) Run() {
-	a.HttpServer.RegisterRouter("/shopping/festival", func(ctx *ghttp.GRegisterController) error {
-		req := ctx.Req.(*vo.GetFestivalHomepageRequest)
+	engion := gin.Default()
+	// biz http handler function
+	engion.GET("/festival/listCards", func(c *gin.Context) {
+		req := &vo.GetFestivalHomepageRequest{}
+		if err := c.ShouldBindQuery(req); err != nil {
+			_ = c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
 		if !a.Authenticator.Check(req.UserID) {
-			ctx.W.WriteHeader(http.StatusUnauthorized)
-			return fmt.Errorf("invalid userID %d", req.UserID)
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
 
-		cards, totalPage, err := a.FestivalServiceClient.ListCards(req.PageIndex, req.PageSize)
+		cards, err := a.FestivalServiceClient.ListCards(req.UserID, req.Num)
 		if err != nil {
-			return err
+			c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
+			return
 		}
 
-		ctx.Rsp = &vo.GetFestivalHomepageResponse{
-			Cards:     cards,
-			PageIndex: req.PageIndex,
-			TotalPage: totalPage,
+		c.PureJSON(http.StatusOK, &vo.GetFestivalHomepageResponse{
+			Cards: cards,
+		})
+		return
+	})
+	engion.GET("/festival/listCachedCards", func(c *gin.Context) {
+		req := &vo.GetFestivalHomepageRequest{}
+		if err := c.ShouldBindQuery(req); err != nil {
+			_ = c.AbortWithError(http.StatusInternalServerError, err)
+			return
 		}
-		return nil
-	}, &vo.GetFestivalHomepageRequest{}, &vo.GetFestivalHomepageResponse{}, http.MethodGet)
-	a.HttpServer.Run(context.Background())
+		if !a.Authenticator.Check(req.UserID) {
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		cards, err := a.FestivalServiceClient.ListCachedCards(req.UserID, req.Num)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		c.PureJSON(http.StatusOK, &vo.GetFestivalHomepageResponse{
+			Cards: cards,
+		})
+		return
+	})
+
+	if err := engion.Run(":8080"); err != nil {
+		panic(err)
+	}
 }
 
 func main() {
-	if err := loadIoC(); err != nil {
+	var mode = flag.String("m", "local", "which profile to be activated, support k8s, docker, local")
+	flag.Parse()
+
+	if err := ioc.Load(
+		config.WithConfigName("shopping_ui"),
+		config.WithProfilesActive(*mode)); err != nil {
 		panic(err)
 	}
 
-	app, err := GetApp()
+	app, err := GetAppSingleton()
 	if err != nil {
 		panic(err)
 	}
 	app.Run()
-}
-
-func loadIoC() error {
-	nameOpt := conf.WithConfigName("ioc_golang")
-	typeOpt := conf.WithConfigType("yaml")
-	err := ioc.Load(nameOpt, typeOpt)
-
-	return err
 }

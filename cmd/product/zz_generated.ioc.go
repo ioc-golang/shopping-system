@@ -15,42 +15,42 @@ import (
 func init() {
 	normal.RegisterStructDescriptor(&autowire.StructDescriptor{
 		Factory: func() interface{} {
-			return &app_{}
+			return &mysqlDBInitializer_{}
 		},
 	})
 	singleton.RegisterStructDescriptor(&autowire.StructDescriptor{
 		Factory: func() interface{} {
-			return &App{}
+			return &MysqlDBInitializer{}
 		},
 	})
 }
 
-type app_ struct {
-	Run_ func()
+type mysqlDBInitializer_ struct {
+	Init_ func()
 }
 
-func (a *app_) Run() {
-	a.Run_()
+func (m *mysqlDBInitializer_) Init() {
+	m.Init_()
 }
 
-type AppIOCInterface interface {
-	Run()
+type MysqlDBInitializerIOCInterface interface {
+	Init()
 }
 
-func GetAppSingleton() (*App, error) {
-	i, err := singleton.GetImpl(util.GetSDIDByStructPtr(new(App)), nil)
+func GetMysqlDBInitializerSingleton() (*MysqlDBInitializer, error) {
+	i, err := singleton.GetImpl(util.GetSDIDByStructPtr(new(MysqlDBInitializer)), nil)
 	if err != nil {
 		return nil, err
 	}
-	impl := i.(*App)
+	impl := i.(*MysqlDBInitializer)
 	return impl, nil
 }
 
-func GetAppIOCInterfaceSingleton() (AppIOCInterface, error) {
-	i, err := singleton.GetImplWithProxy(util.GetSDIDByStructPtr(new(App)), nil)
+func GetMysqlDBInitializerIOCInterfaceSingleton() (MysqlDBInitializerIOCInterface, error) {
+	i, err := singleton.GetImplWithProxy(util.GetSDIDByStructPtr(new(MysqlDBInitializer)), nil)
 	if err != nil {
 		return nil, err
 	}
-	impl := i.(AppIOCInterface)
+	impl := i.(MysqlDBInitializerIOCInterface)
 	return impl, nil
 }

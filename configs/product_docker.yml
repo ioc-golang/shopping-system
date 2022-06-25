@@ -1,0 +1,19 @@
+autowire:
+  normal:
+    github.com/alibaba/ioc-golang/extension/db/gorm.GORMDB:
+      dev-mysql:
+        param:
+          host: "mysql"
+          port: 3306
+          username: "root"
+          password: "root"
+          dbname: "dev"
+
+config:
+  initSqlFilePath: /shopping-system/configs/data/dev_shopping_db_init.sql
+
+debug:
+  app-name: product
+  interceptors:
+    trace:
+      collector-address: jaeger-collector:14268

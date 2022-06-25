@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="go build github.com/ioc-golang/shopping-system/cmd/festival" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
+    <module name="shopping-system" />
+    <working_directory value="$PROJECT_DIR$" />
+    <parameters value="-m local" />
+    <kind value="PACKAGE" />
+    <package value="github.com/ioc-golang/shopping-system/cmd/festival" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/cmd/festival/app.go" />
+    <method v="2" />
+  </configuration>
+</component>

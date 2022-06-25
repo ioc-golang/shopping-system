@@ -1,0 +1,15 @@
+autowire:
+  normal:
+    github.com/alibaba/ioc-golang/extension/db/gorm.GORMDB:
+      dev-mysql:
+        param:
+          host: "mysql"
+          port: 3306
+          username: "root"
+          password: "root"
+          dbname: "dev"
+debug:
+  app-name: advertisement
+  interceptors:
+    trace:
+      collector-address: jaeger-collector:14268

@@ -1,0 +1,122 @@
+version: '3'
+networks:
+  shopping-system:
+
+services:
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector:1.28
+    container_name: jaeger-collector
+    restart: always
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+      - LOG_LEVEL=debug
+    depends_on:
+      - elasticsearch
+    networks:
+      - shopping-system
+    expose:
+      - "14268"
+
+  query:
+    image: jaegertracing/jaeger-query:1.28
+    restart: always
+    container_name: query
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+      - LOG_LEVEL=debug
+    depends_on:
+      - elasticsearch
+    ports:
+      - 16686:16686
+    networks:
+      - shopping-system
+
+  elasticsearch:
+    image: elasticsearch:7.14.2
+    restart: always
+    networks:
+      - shopping-system
+    environment:
+      - "discovery.type=single-node"
+    expose:
+      - "9200"
+  mysql:
+    image: mysql:latest
+    restart: always
+    container_name: mysql
+    networks:
+      - shopping-system
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dev
+    expose:
+      - "3306"
+
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    networks:
+      - shopping-system
+    expose:
+      - "6379"
+
+
+  shopping-system-festival:
+    image: laurencelizhixin/ioc-shopping-system-festival:latest
+    restart: always
+    container_name: ioc-shopping-system-festival
+    networks:
+      - shopping-system
+    entrypoint:
+      - /shopping-system/app
+      - '-m'
+      - docker
+    expose:
+      - "2022"
+
+  shopping-system-product:
+    image: laurencelizhixin/ioc-shopping-system-product:latest
+    restart: always
+    container_name: ioc-shopping-system-product
+    networks:
+      - shopping-system
+    entrypoint:
+      - /shopping-system/app
+      - '-m'
+      - docker
+    expose:
+      - "2022"
+
+  shopping-system-advertisement:
+    image: laurencelizhixin/ioc-shopping-system-advertisement:latest
+    restart: always
+    container_name: ioc-shopping-system-advertisement
+    networks:
+      - shopping-system
+    entrypoint:
+      - /shopping-system/app
+      - '-m'
+      - docker
+    expose:
+      - "2022"
+  shopping-system-shopping-ui:
+    image: laurencelizhixin/ioc-shopping-system-shopping-ui:latest
+    restart: always
+    container_name: ioc-shopping-system-shopping-ui
+    networks:
+      - shopping-system
+    entrypoint:
+      - /shopping-system/app
+      - '-m'
+      - docker
+    expose:
+      - "8080"
+      - "1999"
+    ports:
+      - 1999:1999
+      - 8080:8080
+
+

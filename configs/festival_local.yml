@@ -1,0 +1,26 @@
+autowire:
+  normal:
+    github.com/alibaba/ioc-golang/extension/state/redis.Redis:
+      dev-redis:
+        param:
+          address: "127.0.0.1:6379"
+    github.com/alibaba/ioc-golang/extension/db/gorm.GORMDB:
+      dev-mysql:
+        param:
+          host: "127.0.0.1"
+          port: 3306
+          username: "root"
+          password: "root"
+          dbname: "dev"
+  rpc-client:
+    github.com/ioc-golang/shopping-system/pkg/service/product/api.ServiceIOCRPCClient:
+      param:
+        address: localhost:2022
+    github.com/ioc-golang/shopping-system/pkg/service/advertisement/api.ServiceIOCRPCClient:
+      param:
+        address: localhost:2023
+
+
+
+debug:
+  app-name: festival
