@@ -24,7 +24,7 @@
 
 - 数据层：Mysql server
 
-![tracing3](https://raw.githubusercontent.com/ioc-golang/ioc-golang-website/main/resources/img/shopping-system/structrue.png)
+![tracing3](https://raw.githubusercontent.com/ioc-golang/ioc-golang-website/main/resources/img/shopping-system/structure.png)
 
 ### 1.2 项目代码结构
 
