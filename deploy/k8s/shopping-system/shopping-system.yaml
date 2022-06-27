@@ -132,7 +132,6 @@ metadata:
   name: ioc-shopping-system-advertisement-svc
   namespace: ioc-shopping-system
 spec:
-  internalTrafficPolicy: Cluster
   ports:
     - name: ioc-rpc
       port: 2022
@@ -184,7 +183,6 @@ metadata:
   name: ioc-shopping-system-shopping-ui-svc
   namespace: ioc-shopping-system
 spec:
-  internalTrafficPolicy: Cluster
   ports:
     - name: http
       port: 8080

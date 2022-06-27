@@ -38,7 +38,6 @@ metadata:
   name: jaeger-collector-svc
   namespace: ioc-shopping-system
 spec:
-  internalTrafficPolicy: Cluster
   ports:
     - name: jaeger-collector
       port: 14268
@@ -89,7 +88,6 @@ metadata:
   name: jaeger-query-svc
   namespace: ioc-shopping-system
 spec:
-  internalTrafficPolicy: Cluster
   ports:
     - name: jaeger-query
       port: 16686
@@ -136,7 +134,6 @@ metadata:
   name: elasticsearch-svc
   namespace: ioc-shopping-system
 spec:
-  internalTrafficPolicy: Cluster
   ports:
     - name: elasticsearch
       port: 9200

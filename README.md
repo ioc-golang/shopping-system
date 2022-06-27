@@ -95,9 +95,7 @@ kube-system           Active   7d7h
 如果您未 clone 本工程，执行如下命令安装全部资源。
 
 ```bash
-kubectl apply -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/namespace/namespace.yaml -f=https://raw.github
-usercontent.com/ioc-golang/shopping-system/main/deploy/k8s/shopping-system/mysql.yaml -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/shopping-system/r
-edis.yaml  -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/shopping-system/trace.yaml  -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/shopping-system/shopping-system.yaml 
+kubectl apply -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/namespace/namespace.yaml -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/shopping-system/mysql.yaml -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/shopping-system/redis.yaml  -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/shopping-system/trace.yaml  -f=https://raw.githubusercontent.com/ioc-golang/shopping-system/main/deploy/k8s/shopping-system/shopping-system.yaml 
 ```
 
 可看到日志打印：
@@ -131,7 +129,7 @@ service/elasticsearch-svc created
  kubectl get pods -n ioc-shopping-system --watch
 ```
 
-等待所有应用 pod 都呈现 Running 状态，期间可能由于资源启动顺序的问题出现 Error，等待一段时间即可。
+等待所有应用 pod 都呈现 Running 状态，期间可能由于资源启动顺序的问题出现 Error，等待一段时间即可，或者通过 `kubectl delete pod` 手动删除掉 Error 状态的pod。
 
 ```bash
 NAME                                                 READY   STATUS    RESTARTS      AGE

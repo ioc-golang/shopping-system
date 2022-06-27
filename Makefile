@@ -1,5 +1,5 @@
 tidy:
-	go mod tidy -compat=1.17
+	go mod tidy
 
 build-all-binary: tidy
 	export GOPROXY="https://goproxy.cn"
