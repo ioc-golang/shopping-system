@@ -2,13 +2,15 @@ package main
 
 import (
 	"flag"
+	"io/ioutil"
+	"strings"
+
 	"github.com/alibaba/ioc-golang"
 	conf "github.com/alibaba/ioc-golang/config"
 	"github.com/alibaba/ioc-golang/extension/config"
 	"github.com/alibaba/ioc-golang/extension/db/gorm"
+
 	_ "github.com/ioc-golang/shopping-system/pkg/service/product"
-	"io/ioutil"
-	"strings"
 )
 
 // +ioc:autowire=true

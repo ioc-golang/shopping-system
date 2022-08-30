@@ -1,15 +1,17 @@
 package festival
 
 import (
+	"log"
+	"strconv"
+	"time"
+
 	"github.com/alibaba/ioc-golang/extension/db/gorm"
 	"github.com/alibaba/ioc-golang/extension/state/redis"
+
 	"github.com/ioc-golang/shopping-system/pkg/model/do"
 	"github.com/ioc-golang/shopping-system/pkg/model/dto"
 	adsAPI "github.com/ioc-golang/shopping-system/pkg/service/advertisement/api"
 	productAPI "github.com/ioc-golang/shopping-system/pkg/service/product/api"
-	"log"
-	"strconv"
-	"time"
 )
 
 // +ioc:autowire=true

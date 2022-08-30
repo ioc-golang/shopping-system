@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jaeger-collector
+  name: jaeger-collector
+  namespace: ioc-shopping-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaeger-collector
+  template:
+    metadata:
+      labels:
+        app: jaeger-collector
+    spec:
+      containers:
+        - env:
+            - name: SPAN_STORAGE_TYPE
+              value: elasticsearch
+            - name: ES_SERVER_URLS
+              value: http://elasticsearch-svc:9200
+            - name: LOG_LEVEL
+              value: debug
+          image: {{ .Values.repo }}/jaeger-collector:1.28
+          imagePullPolicy: Always
+          name: jaeger-collector
+          ports:
+            - containerPort: 14268
+              name: jaeger
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger-collector-svc
+  namespace: ioc-shopping-system
+spec:
+  ports:
+    - name: jaeger-collector
+      port: 14268
+      protocol: TCP
+      targetPort: 14268
+  selector:
+    app: jaeger-collector
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jaeger-query
+  name: jaeger-query
+  namespace: ioc-shopping-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaeger-query
+  template:
+    metadata:
+      labels:
+        app: jaeger-query
+    spec:
+      containers:
+        - env:
+            - name: SPAN_STORAGE_TYPE
+              value: elasticsearch
+            - name: ES_SERVER_URLS
+              value: http://elasticsearch-svc:9200
+            - name: LOG_LEVEL
+              value: debug
+          image: {{ .Values.repo }}/jaeger-query:1.28
+          imagePullPolicy: Always
+          name: jaeger-query
+          ports:
+            - containerPort: 14268
+              name: jaeger-query
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger-query-svc
+  namespace: ioc-shopping-system
+spec:
+  ports:
+    - name: jaeger-query
+      port: 16686
+      protocol: TCP
+      targetPort: 16686
+  selector:
+    app: jaeger-query
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: elasticsearch
+  name: elasticsearch
+  namespace: ioc-shopping-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+        - env:
+            - name: discovery.type
+              value: single-node
+          image: {{ .Values.repo }}/elasticsearch:7.14.2
+          imagePullPolicy: Always
+          name: elasticsearch
+          ports:
+            - containerPort: 9200
+              name: elasticsearch
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch-svc
+  namespace: ioc-shopping-system
+spec:
+  ports:
+    - name: elasticsearch
+      port: 9200
+      protocol: TCP
+      targetPort: 9200
+  selector:
+    app: elasticsearch
+  type: ClusterIP

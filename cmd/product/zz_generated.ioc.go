@@ -18,11 +18,16 @@ func init() {
 			return &mysqlDBInitializer_{}
 		},
 	})
-	singleton.RegisterStructDescriptor(&autowire.StructDescriptor{
+	mysqlDBInitializerStructDescriptor := &autowire.StructDescriptor{
 		Factory: func() interface{} {
 			return &MysqlDBInitializer{}
 		},
-	})
+		Metadata: map[string]interface{}{
+			"aop":      map[string]interface{}{},
+			"autowire": map[string]interface{}{},
+		},
+	}
+	singleton.RegisterStructDescriptor(mysqlDBInitializerStructDescriptor)
 }
 
 type mysqlDBInitializer_ struct {
@@ -37,8 +42,13 @@ type MysqlDBInitializerIOCInterface interface {
 	Init()
 }
 
+var _mysqlDBInitializerSDID string
+
 func GetMysqlDBInitializerSingleton() (*MysqlDBInitializer, error) {
-	i, err := singleton.GetImpl(util.GetSDIDByStructPtr(new(MysqlDBInitializer)), nil)
+	if _mysqlDBInitializerSDID == "" {
+		_mysqlDBInitializerSDID = util.GetSDIDByStructPtr(new(MysqlDBInitializer))
+	}
+	i, err := singleton.GetImpl(_mysqlDBInitializerSDID, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -47,10 +57,21 @@ func GetMysqlDBInitializerSingleton() (*MysqlDBInitializer, error) {
 }
 
 func GetMysqlDBInitializerIOCInterfaceSingleton() (MysqlDBInitializerIOCInterface, error) {
-	i, err := singleton.GetImplWithProxy(util.GetSDIDByStructPtr(new(MysqlDBInitializer)), nil)
+	if _mysqlDBInitializerSDID == "" {
+		_mysqlDBInitializerSDID = util.GetSDIDByStructPtr(new(MysqlDBInitializer))
+	}
+	i, err := singleton.GetImplWithProxy(_mysqlDBInitializerSDID, nil)
 	if err != nil {
 		return nil, err
 	}
 	impl := i.(MysqlDBInitializerIOCInterface)
 	return impl, nil
+}
+
+type ThisMysqlDBInitializer struct {
+}
+
+func (t *ThisMysqlDBInitializer) This() MysqlDBInitializerIOCInterface {
+	thisPtr, _ := GetMysqlDBInitializerIOCInterfaceSingleton()
+	return thisPtr
 }

@@ -18,11 +18,16 @@ func init() {
 			return &app_{}
 		},
 	})
-	singleton.RegisterStructDescriptor(&autowire.StructDescriptor{
+	appStructDescriptor := &autowire.StructDescriptor{
 		Factory: func() interface{} {
 			return &App{}
 		},
-	})
+		Metadata: map[string]interface{}{
+			"aop":      map[string]interface{}{},
+			"autowire": map[string]interface{}{},
+		},
+	}
+	singleton.RegisterStructDescriptor(appStructDescriptor)
 }
 
 type app_ struct {
@@ -37,8 +42,13 @@ type AppIOCInterface interface {
 	Run()
 }
 
+var _appSDID string
+
 func GetAppSingleton() (*App, error) {
-	i, err := singleton.GetImpl(util.GetSDIDByStructPtr(new(App)), nil)
+	if _appSDID == "" {
+		_appSDID = util.GetSDIDByStructPtr(new(App))
+	}
+	i, err := singleton.GetImpl(_appSDID, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -47,10 +57,21 @@ func GetAppSingleton() (*App, error) {
 }
 
 func GetAppIOCInterfaceSingleton() (AppIOCInterface, error) {
-	i, err := singleton.GetImplWithProxy(util.GetSDIDByStructPtr(new(App)), nil)
+	if _appSDID == "" {
+		_appSDID = util.GetSDIDByStructPtr(new(App))
+	}
+	i, err := singleton.GetImplWithProxy(_appSDID, nil)
 	if err != nil {
 		return nil, err
 	}
 	impl := i.(AppIOCInterface)
 	return impl, nil
+}
+
+type ThisApp struct {
+}
+
+func (t *ThisApp) This() AppIOCInterface {
+	thisPtr, _ := GetAppIOCInterfaceSingleton()
+	return thisPtr
 }

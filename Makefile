@@ -1,3 +1,5 @@
+REPO=docker.io/laurencelizhixin
+
 tidy:
 	go mod tidy
 
@@ -19,22 +21,22 @@ build-all-images: build-all-binary
 	docker buildx build \
 		--build-arg appname=festival \
 		--platform linux/amd64 \
-		-t laurencelizhixin/ioc-shopping-system-festival:latest \
+		-t $(REPO)/ioc-shopping-system-festival:latest \
 		. --push
 	docker buildx build \
 		--build-arg appname=advertisement \
 		--platform linux/amd64 \
-		-t laurencelizhixin/ioc-shopping-system-advertisement:latest \
+		-t $(REPO)/ioc-shopping-system-advertisement:latest \
 		. --push
 	docker buildx build \
 		--build-arg appname=product \
 		--platform linux/amd64 \
-		-t laurencelizhixin/ioc-shopping-system-product:latest \
+		-t $(REPO)/ioc-shopping-system-product:latest \
 		. --push
 	docker buildx build \
 		--build-arg appname=shopping-ui \
 		--platform linux/amd64 \
-		-t laurencelizhixin/ioc-shopping-system-shopping-ui:latest \
+		-t $(REPO)/ioc-shopping-system-shopping-ui:latest \
 		. --push
 	make clear-all-binary
 
@@ -55,3 +57,6 @@ remove-from-docker:
 
 iocli-update:
 	iocli gen
+
+imports:
+	sudo goimports -local github.com/ioc-golang/shopping-system -w .

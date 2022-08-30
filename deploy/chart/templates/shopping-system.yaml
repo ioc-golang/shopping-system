@@ -1,0 +1,197 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ioc-shopping-system-festival
+  name: ioc-shopping-system-festival
+  namespace: ioc-shopping-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ioc-shopping-system-festival
+  template:
+    metadata:
+      labels:
+        app: ioc-shopping-system-festival
+    spec:
+      containers:
+        - command:
+            - /shopping-system/app
+            - '-m'
+            - k8s
+          image: {{ .Values.repo }}/ioc-shopping-system-festival:latest
+          imagePullPolicy: Always
+          name: ioc-shopping-system-festival
+
+          ports:
+            - containerPort: 2022
+              name: ioc-rpc
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ioc-shopping-system-festival-svc
+  namespace: ioc-shopping-system
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+    - name: ioc-rpc
+      port: 2022
+      protocol: TCP
+      targetPort: 2022
+  selector:
+    app: ioc-shopping-system-festival
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ioc-shopping-system-product
+  name: ioc-shopping-system-product
+  namespace: ioc-shopping-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ioc-shopping-system-product
+  template:
+    metadata:
+      labels:
+        app: ioc-shopping-system-product
+    spec:
+      containers:
+        - command:
+            - /shopping-system/app
+            - '-m'
+            - k8s
+          image: {{ .Values.repo }}/ioc-shopping-system-product:latest
+          imagePullPolicy: Always
+          name: ioc-shopping-system-product
+          ports:
+            - containerPort: 2022
+              name: ioc-rpc
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ioc-shopping-system-product-svc
+  namespace: ioc-shopping-system
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+    - name: ioc-rpc
+      port: 2022
+      protocol: TCP
+      targetPort: 2022
+  selector:
+    app: ioc-shopping-system-product
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ioc-shopping-system-advertisement
+  name: ioc-shopping-system-advertisement
+  namespace: ioc-shopping-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ioc-shopping-system-advertisement
+  template:
+    metadata:
+      labels:
+        app: ioc-shopping-system-advertisement
+    spec:
+      containers:
+        - command:
+            - /shopping-system/app
+            - '-m'
+            - k8s
+          image: {{ .Values.repo }}/ioc-shopping-system-advertisement:latest
+          imagePullPolicy: Always
+          name: ioc-shopping-system-advertisement
+          ports:
+            - containerPort: 2022
+              name: ioc-rpc
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ioc-shopping-system-advertisement-svc
+  namespace: ioc-shopping-system
+spec:
+  ports:
+    - name: ioc-rpc
+      port: 2022
+      protocol: TCP
+      targetPort: 2022
+  selector:
+    app: ioc-shopping-system-advertisement
+  type: ClusterIP
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ioc-shopping-system-shopping-ui
+  name: ioc-shopping-system-shopping-ui
+  namespace: ioc-shopping-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ioc-shopping-system-shopping-ui
+  template:
+    metadata:
+      labels:
+        app: ioc-shopping-system-shopping-ui
+    spec:
+      containers:
+        - command:
+            - /shopping-system/app
+            - '-m'
+            - k8s
+          image: {{ .Values.repo }}/ioc-shopping-system-shopping-ui:latest
+          imagePullPolicy: Always
+          name: ioc-shopping-system-shopping-ui
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            - containerPort: 1999
+              name: ioc-debug
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ioc-shopping-system-shopping-ui-svc
+  namespace: ioc-shopping-system
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: ioc-debug
+      port: 1999
+      protocol: TCP
+      targetPort: 1999
+  selector:
+    app: ioc-shopping-system-shopping-ui
+  type: ClusterIP

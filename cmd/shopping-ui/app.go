@@ -2,13 +2,15 @@ package main
 
 import (
 	"flag"
+	"net/http"
+
 	"github.com/alibaba/ioc-golang"
 	"github.com/alibaba/ioc-golang/config"
 	"github.com/gin-gonic/gin"
+
 	"github.com/ioc-golang/shopping-system/internal/auth"
 	"github.com/ioc-golang/shopping-system/pkg/model/vo"
 	festivalAPI "github.com/ioc-golang/shopping-system/pkg/service/festival/api"
-	"net/http"
 )
 
 // +ioc:autowire=true
