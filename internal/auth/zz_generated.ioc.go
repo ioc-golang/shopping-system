@@ -18,11 +18,16 @@ func init() {
 			return &authenticator_{}
 		},
 	})
-	singleton.RegisterStructDescriptor(&autowire.StructDescriptor{
+	authenticatorStructDescriptor := &autowire.StructDescriptor{
 		Factory: func() interface{} {
 			return &Authenticator{}
 		},
-	})
+		Metadata: map[string]interface{}{
+			"aop":      map[string]interface{}{},
+			"autowire": map[string]interface{}{},
+		},
+	}
+	singleton.RegisterStructDescriptor(authenticatorStructDescriptor)
 }
 
 type authenticator_ struct {
@@ -37,8 +42,13 @@ type AuthenticatorIOCInterface interface {
 	Check(userID int64) bool
 }
 
+var _authenticatorSDID string
+
 func GetAuthenticatorSingleton() (*Authenticator, error) {
-	i, err := singleton.GetImpl(util.GetSDIDByStructPtr(new(Authenticator)), nil)
+	if _authenticatorSDID == "" {
+		_authenticatorSDID = util.GetSDIDByStructPtr(new(Authenticator))
+	}
+	i, err := singleton.GetImpl(_authenticatorSDID, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -47,10 +57,21 @@ func GetAuthenticatorSingleton() (*Authenticator, error) {
 }
 
 func GetAuthenticatorIOCInterfaceSingleton() (AuthenticatorIOCInterface, error) {
-	i, err := singleton.GetImplWithProxy(util.GetSDIDByStructPtr(new(Authenticator)), nil)
+	if _authenticatorSDID == "" {
+		_authenticatorSDID = util.GetSDIDByStructPtr(new(Authenticator))
+	}
+	i, err := singleton.GetImplWithProxy(_authenticatorSDID, nil)
 	if err != nil {
 		return nil, err
 	}
 	impl := i.(AuthenticatorIOCInterface)
 	return impl, nil
+}
+
+type ThisAuthenticator struct {
+}
+
+func (t *ThisAuthenticator) This() AuthenticatorIOCInterface {
+	thisPtr, _ := GetAuthenticatorIOCInterfaceSingleton()
+	return thisPtr
 }

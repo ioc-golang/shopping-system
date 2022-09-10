@@ -2,9 +2,11 @@ package main
 
 import (
 	"flag"
+
 	"github.com/alibaba/ioc-golang"
 	conf "github.com/alibaba/ioc-golang/config"
 	"github.com/alibaba/ioc-golang/extension/autowire/rpc/rpc_service"
+
 	_ "github.com/ioc-golang/shopping-system/pkg/service/festival"
 )
 

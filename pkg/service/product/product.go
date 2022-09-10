@@ -1,9 +1,11 @@
 package product
 
 import (
-	"github.com/alibaba/ioc-golang/extension/db/gorm"
-	"github.com/ioc-golang/shopping-system/pkg/model/do"
 	"math/rand"
+
+	"github.com/alibaba/ioc-golang/extension/db/gorm"
+
+	"github.com/ioc-golang/shopping-system/pkg/model/do"
 )
 
 // +ioc:autowire=true

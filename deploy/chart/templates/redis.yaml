@@ -16,7 +16,7 @@ spec:
         app: redis
     spec:
       containers:
-        - image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/redis:latest
+        - image: {{ .Values.repo }}/redis:latest
           imagePullPolicy: Always
           name: redis
           ports:

@@ -2,41 +2,46 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: redis
-  name: redis
+    app: mysql
+  name: mysql
   namespace: ioc-shopping-system
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: redis
+      app: mysql
   template:
     metadata:
       labels:
-        app: redis
+        app: mysql
     spec:
       containers:
-        - image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/redis:latest
+        - env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: dev
+          image: {{ .Values.repo }}/mysql:latest
           imagePullPolicy: Always
-          name: redis
+          name: mysql
           ports:
-            - containerPort: 6379
-              name: redis
+            - containerPort: 3306
+              name: mysql
               protocol: TCP
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-svc
+  name: mysql-svc
   namespace: ioc-shopping-system
 spec:
   internalTrafficPolicy: Cluster
   ports:
-    - name: redis
-      port: 6379
+    - name: mysql
+      port: 3306
       protocol: TCP
-      targetPort: 6379
+      targetPort: 3306
   selector:
-    app: redis
+    app: mysql
   type: ClusterIP

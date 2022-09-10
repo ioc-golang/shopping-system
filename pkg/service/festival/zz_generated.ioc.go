@@ -10,6 +10,7 @@ import (
 	normal "github.com/alibaba/ioc-golang/autowire/normal"
 	util "github.com/alibaba/ioc-golang/autowire/util"
 	rpc_service "github.com/alibaba/ioc-golang/extension/autowire/rpc/rpc_service"
+
 	"github.com/ioc-golang/shopping-system/pkg/model/do"
 	"github.com/ioc-golang/shopping-system/pkg/model/dto"
 )
@@ -20,12 +21,17 @@ func init() {
 			return &service_{}
 		},
 	})
-	rpc_service.RegisterStructDescriptor(&autowire.StructDescriptor{
+	serviceStructDescriptor := &autowire.StructDescriptor{
 		Alias: "github.com/ioc-golang/shopping-system/pkg/service/festival/api.ServiceIOCRPCClient",
 		Factory: func() interface{} {
 			return &Service{}
 		},
-	})
+		Metadata: map[string]interface{}{
+			"aop":      map[string]interface{}{},
+			"autowire": map[string]interface{}{},
+		},
+	}
+	rpc_service.RegisterStructDescriptor(serviceStructDescriptor)
 }
 
 type service_ struct {
@@ -82,8 +88,13 @@ type ServiceIOCInterface interface {
 	getAds(id int64) (*do.AdvertisementDO, error)
 }
 
+var _serviceSDID string
+
 func GetServiceRpc() (*Service, error) {
-	i, err := rpc_service.GetImpl(util.GetSDIDByStructPtr(new(Service)))
+	if _serviceSDID == "" {
+		_serviceSDID = util.GetSDIDByStructPtr(new(Service))
+	}
+	i, err := rpc_service.GetImpl(_serviceSDID)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +103,10 @@ func GetServiceRpc() (*Service, error) {
 }
 
 func GetServiceIOCInterfaceRpc() (ServiceIOCInterface, error) {
-	i, err := rpc_service.GetImplWithProxy(util.GetSDIDByStructPtr(new(Service)))
+	if _serviceSDID == "" {
+		_serviceSDID = util.GetSDIDByStructPtr(new(Service))
+	}
+	i, err := rpc_service.GetImplWithProxy(_serviceSDID)
 	if err != nil {
 		return nil, err
 	}

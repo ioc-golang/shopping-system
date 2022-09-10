@@ -20,7 +20,7 @@ spec:
             - /shopping-system/app
             - '-m'
             - k8s
-          image: 'registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/ioc-shopping-system-festival:latest'
+          image: {{ .Values.repo }}/ioc-shopping-system-festival:latest
           imagePullPolicy: Always
           name: ioc-shopping-system-festival
 
@@ -69,7 +69,7 @@ spec:
             - /shopping-system/app
             - '-m'
             - k8s
-          image: 'registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/ioc-shopping-system-product:latest'
+          image: {{ .Values.repo }}/ioc-shopping-system-product:latest
           imagePullPolicy: Always
           name: ioc-shopping-system-product
           ports:
@@ -117,7 +117,7 @@ spec:
             - /shopping-system/app
             - '-m'
             - k8s
-          image: 'registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/ioc-shopping-system-advertisement:latest'
+          image: {{ .Values.repo }}/ioc-shopping-system-advertisement:latest
           imagePullPolicy: Always
           name: ioc-shopping-system-advertisement
           ports:
@@ -165,7 +165,7 @@ spec:
             - /shopping-system/app
             - '-m'
             - k8s
-          image: 'registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/ioc-shopping-system-shopping-ui:latest'
+          image: {{ .Values.repo }}/ioc-shopping-system-shopping-ui:latest
           imagePullPolicy: Always
           name: ioc-shopping-system-shopping-ui
           ports:
