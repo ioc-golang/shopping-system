@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: mysql
+    app: redis
   name: redis
   namespace: ioc-shopping-system
 spec:
@@ -16,7 +16,7 @@ spec:
         app: redis
     spec:
       containers:
-        - image: 'redis:latest'
+        - image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/redis:latest
           imagePullPolicy: Always
           name: redis
           ports:

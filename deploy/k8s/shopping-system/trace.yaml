@@ -23,7 +23,7 @@ spec:
               value: http://elasticsearch-svc:9200
             - name: LOG_LEVEL
               value: debug
-          image: 'jaegertracing/jaeger-collector:1.28'
+          image: 'registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/jaeger-collector:1.28'
           imagePullPolicy: Always
           name: jaeger-collector
           ports:
@@ -73,7 +73,7 @@ spec:
               value: http://elasticsearch-svc:9200
             - name: LOG_LEVEL
               value: debug
-          image: 'jaegertracing/jaeger-query:1.28'
+          image: 'registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/jaeger-query:1.28'
           imagePullPolicy: Always
           name: jaeger-query
           ports:
@@ -119,7 +119,7 @@ spec:
         - env:
             - name: discovery.type
               value: single-node
-          image: 'elasticsearch:7.14.2'
+          image: 'registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/elasticsearch:7.14.2'
           imagePullPolicy: Always
           name: elasticsearch
           ports:

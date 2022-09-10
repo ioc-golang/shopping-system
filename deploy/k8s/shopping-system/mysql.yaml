@@ -21,7 +21,7 @@ spec:
               value: root
             - name: MYSQL_DATABASE
               value: dev
-          image: 'mysql:latest'
+          image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/mysql:latest
           imagePullPolicy: Always
           name: mysql
           ports:

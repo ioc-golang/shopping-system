@@ -4,7 +4,7 @@ networks:
 
 services:
   jaeger-collector:
-    image: jaegertracing/jaeger-collector:1.28
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/jaeger-collector:1.28
     container_name: jaeger-collector
     restart: always
     environment:
@@ -19,7 +19,7 @@ services:
       - "14268"
 
   query:
-    image: jaegertracing/jaeger-query:1.28
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/jaeger-query:1.28
     restart: always
     container_name: query
     environment:
@@ -34,7 +34,7 @@ services:
       - shopping-system
 
   elasticsearch:
-    image: elasticsearch:7.14.2
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/elasticsearch:7.14.2
     restart: always
     networks:
       - shopping-system
@@ -43,7 +43,7 @@ services:
     expose:
       - "9200"
   mysql:
-    image: mysql:latest
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/mysql:latest
     restart: always
     container_name: mysql
     networks:
@@ -55,7 +55,7 @@ services:
       - "3306"
 
   redis:
-    image: redis:latest
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/redis:latest
     restart: always
     container_name: redis
     networks:
@@ -65,7 +65,7 @@ services:
 
 
   shopping-system-festival:
-    image: laurencelizhixin/ioc-shopping-system-festival:latest
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/ioc-shopping-system-festival:latest
     restart: always
     container_name: ioc-shopping-system-festival
     networks:
@@ -78,7 +78,7 @@ services:
       - "2022"
 
   shopping-system-product:
-    image: laurencelizhixin/ioc-shopping-system-product:latest
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/ioc-shopping-system-product:latest
     restart: always
     container_name: ioc-shopping-system-product
     networks:
@@ -91,7 +91,7 @@ services:
       - "2022"
 
   shopping-system-advertisement:
-    image: laurencelizhixin/ioc-shopping-system-advertisement:latest
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/ioc-shopping-system-advertisement:latest
     restart: always
     container_name: ioc-shopping-system-advertisement
     networks:
@@ -103,7 +103,7 @@ services:
     expose:
       - "2022"
   shopping-system-shopping-ui:
-    image: laurencelizhixin/ioc-shopping-system-shopping-ui:latest
+    image: registry.cn-hangzhou.aliyuncs.com/ioc-shopping-system/ioc-shopping-system-shopping-ui:latest
     restart: always
     container_name: ioc-shopping-system-shopping-ui
     networks:
